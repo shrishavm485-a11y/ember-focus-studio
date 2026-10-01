@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EMBER – Focus Studio for Deep Work & Study</title>
+<style>
+:root{--o:#FF4C00;--bg:#fff;--fg:#000;--mut:#777;--ln:#0002;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0a0a;--fg:#fff;--mut:#999;--ln:#fff3}}
+:root[data-theme="dark"]{--bg:#0a0a0a;--fg:#fff;--mut:#999;--ln:#fff3}
+html{background:var(--o);scroll-behavior:smooth;scroll-padding-top:60px}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;text-transform:uppercase;overflow-x:hidden}
+.s{font-family:Georgia,serif;font-weight:400;letter-spacing:-.05em}
+.w{padding:0 22px;max-width:1400px;margin:0 auto}
+button{font:inherit;text-transform:uppercase;color:inherit;background:none;border:0;cursor:pointer}
+.br{transition:.3s}.br::before{content:"[ "}.br::after{content:" ]"}.br:hover{color:var(--o);letter-spacing:.06em}
+#pre{position:fixed;inset:0;background:#000;color:#fff;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .7s}
+#pre.gone{opacity:0;pointer-events:none}
+#pre .c{font-size:clamp(70px,16vw,200px);color:var(--o)}
+#enter{opacity:0;transform:translateY(12px);transition:.5s;color:var(--o)}#enter.show{opacity:1;transform:none}
+#dot{position:fixed;width:12px;height:12px;border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;z-index:200;transform:translate(-50%,-50%);transition:width .25s,height .25s;display:none}
+@media (hover:hover) and (pointer:fine){#dot{display:block}}
+.top{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:40;display:flex;justify-content:space-between;padding:16px 22px;font-size:13px;mix-blend-mode:difference;color:#fff}
+.hero{background:var(--o);color:#fff;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:100px 0 70px}
+.hero h1{font-size:clamp(70px,22vw,340px);line-height:.8}
+.hero .row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-end;margin-top:34px}
+.hero p{font-size:clamp(18px,2.6vw,34px);line-height:.95;max-width:20em;min-height:3em}
+.bar{position:fixed;bottom:0;left:0;right:0;z-index:30;text-align:center;font-size:12px;padding:14px;mix-blend-mode:difference;color:#fff;pointer-events:none;transition:opacity .4s}
+.bar span{animation:p 2s infinite}@keyframes p{50%{opacity:.4}}
+.just{padding:110px 0}
+.just p{font-size:clamp(40px,9vw,130px);line-height:.92;display:flex;flex-direction:column}
+.just .l{display:flex;justify-content:space-between;gap:.3em;overflow:hidden}
+.just .l span{display:inline-block;transform:translateY(105%);transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.just.in .l span{transform:none}
+.lab{font-size:12px;margin-bottom:22px;color:var(--mut)}
+section.t{padding:90px 0;border-top:1px solid var(--ln)}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:50px}@media(max-width:850px){.tg{grid-template-columns:1fr}}
+h2{font-size:clamp(40px,7vw,100px);line-height:.88;margin-bottom:28px}
+.timer{display:flex;flex-direction:column;align-items:center;gap:20px}
+.ring{position:relative;width:min(80vw,340px);aspect-ratio:1}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:5}
+#rb{stroke:var(--ln)}#rp{stroke:var(--o);stroke-linecap:round;transition:stroke-dashoffset .5s linear}
+.ring .tm{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:clamp(50px,13vw,84px);font-variant-numeric:tabular-nums}
+.ring small{font-size:12px;color:var(--mut);font-family:Helvetica,Arial,sans-serif;letter-spacing:.1em}
+.modes,.ctl{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;font-size:14px}
+.modes button{opacity:.45;border-bottom:1px solid transparent}.modes button.on{opacity:1;border-color:var(--o);color:var(--o)}
+.sess{font-size:12px;color:var(--mut)}
+.add{display:flex;gap:10px;border-bottom:1px solid var(--fg);padding-bottom:8px;margin-bottom:10px}
+.add input{flex:1;background:none;border:0;color:var(--fg);font:inherit;font-size:16px;text-transform:uppercase;outline:0}
+.tk{list-style:none;padding:0}
+.tk li{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--ln);font-size:16px;animation:in .4s}
+@keyframes in{from{opacity:0;transform:translateX(-14px)}}
+.tk li.d span{text-decoration:line-through;color:var(--mut)}
+.tk li span{flex:1;cursor:pointer}
+.tk .x{color:var(--mut)}.tk .x:hover{color:var(--o)}
+.chk{width:20px;height:20px;border:1px solid var(--fg);display:grid;place-items:center;font-size:12px}
+.d .chk{background:var(--o);border-color:var(--o);color:#fff}
+.prog{height:3px;background:var(--ln);margin:6px 0 18px}.prog i{display:block;height:100%;width:0;background:var(--o);transition:.5s}
+.breath{background:#000;color:#fff;padding:90px 0;text-align:center}
+.orb{width:min(60vw,260px);aspect-ratio:1;border-radius:50%;margin:40px auto;background:var(--o);display:grid;place-items:center;font-size:18px;transform:scale(.55);transition:transform 4s ease-in-out}
+.sc{padding:90px 0}
+.box{position:relative;height:min(55vw,360px);min-height:220px;background:var(--o);overflow:hidden;margin:24px 0}
+.box .u{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;padding:24px;font-size:clamp(22px,4vw,48px);line-height:.95}
+.box canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.meth{background:#000;color:#fff;padding:90px 0;min-height:100svh}
+.num{display:flex;justify-content:space-between;font-size:clamp(60px,14vw,210px);line-height:.9;border-bottom:1px solid #fff;margin:6vh 0 24px;padding-bottom:.08em}
+.num .n{color:var(--o)}
+.md{max-width:24em;font-size:clamp(16px,1.8vw,22px);line-height:1.1;min-height:5em}
+.ml{margin-top:20px;display:flex;gap:30px;flex-wrap:wrap;color:#aaa;font-size:14px}.ml li{list-style:none}
+.nav2{margin-top:30px;display:flex;gap:14px;font-size:14px}
+.ov{position:fixed;inset:0;background:#000;color:#fff;z-index:60;padding:calc(24px + env(safe-area-inset-top,0px)) 22px 24px;clip-path:inset(0 0 100% 0);transition:clip-path .8s cubic-bezier(.7,0,.2,1);overflow:auto}
+.ov.open{clip-path:inset(0)}
+.ov .hd{display:flex;justify-content:space-between;font-size:13px;color:var(--o)}
+.ov textarea{width:100%;height:40vh;margin-top:6vh;background:none;border:0;border-bottom:1px solid #fff;color:#fff;font:inherit;font-size:clamp(16px,2.2vw,26px);text-transform:none;resize:none;outline:0;line-height:1.2}
+.ov textarea:focus{border-color:var(--o)}
+.ov .ft{display:flex;justify-content:space-between;margin-top:14px;font-size:13px;gap:10px;flex-wrap:wrap}
+.ov .big{margin-top:6vh;font-size:clamp(70px,24vw,360px);line-height:.8;color:#222}
+footer{padding:60px 0 90px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12px}
+</style>
+</head>
+<body>
+<div id="pre"><div class="c s" id="cnt">000</div><button id="enter" class="br">Enter</button></div>
+<div id="dot"></div>
+<div class="top"><span>Ember</span><span><button id="th">Theme</button> &nbsp; <button id="jo" class="br">Journal</button></span></div>
+<div class="bar" id="bar"><span>Scroll for more</span></div>
+
+<section class="hero"><div class="w">
+<h1 class="s">Ember</h1>
+<div class="row"><p class="s" id="tw"></p><button class="br" onclick="document.getElementById('tools').scrollIntoView()">Start focusing</button></div>
+</div></section>
+
+<section class="just" id="just"><div class="w"><p id="jp"></p></div></section>
+
+<section class="t" id="tools"><div class="w tg">
+<div><div class="lab">01 · Focus timer</div><h2 class="s">One thing at a time.</h2>
+<div class="timer">
+<div class="modes" id="modes"></div>
+<div class="ring"><svg viewBox="0 0 100 100"><circle id="rb" cx="50" cy="50" r="46"/><circle id="rp" cx="50" cy="50" r="46"/></svg><div class="tm s"><span id="tt">25:00</span><small id="tl">Focus</small></div></div>
+<div class="ctl"><button class="br" id="go">Start</button><button class="br" id="rs">Reset</button></div>
+<div class="sess" id="se">Sessions today: 0</div>
+</div></div>
+<div><div class="lab">02 · Today's tasks</div><h2 class="s">Small wins.</h2>
+<div class="add"><input id="ti" placeholder="Add a task" maxlength="80"><button id="ta" class="br">Add</button></div>
+<div class="prog"><i id="pg"></i></div>
+<ul class="tk" id="tk"></ul>
+<div class="sess" id="tc"></div></div>
+</div></section>
+
+<section class="breath"><div class="w"><div class="lab" style="color:#aaa">03 · Reset</div><h2 class="s">Breathe.</h2>
+<div class="orb s" id="orb">Ready</div><button class="br" id="bb">Begin</button></div></section>
+
+<section class="meth" id="meth"><div class="w">
+<div style="font-size:13px">The method</div>
+<div class="num s"><span>00<span class="n" id="mn">1</span></span><span id="mt">Plan</span></div>
+<p class="md" id="md"></p><ul class="ml" id="ml"></ul>
+<div class="nav2"><button id="pv">Prev</button> / <button id="nx">Next</button></div>
+</div></section>
+
+<section class="sc"><div class="w"><div class="lab">04 · Scratch for today's study tip</div>
+<div class="box"><div class="u s" id="tip"></div><canvas id="cv"></canvas></div>
+<button class="br" id="nt">New tip</button></div></section>
+
+<div class="w"><footer><span>Ember · Focus Studio</span><span>Your tasks and journal stay in this browser.</span></footer></div>
+
+<div class="ov" id="ov"><div class="hd"><span>Journal · what did you learn today?</span><button id="cl">Close</button></div>
+<textarea id="jt" placeholder="Write freely…"></textarea>
+<div class="ft"><span id="wc">0 words</span><span id="js"></span><button class="br" id="dl">Download .txt</button></div>
+<div class="big s">Reflect</div></div>
+
+<script>
+const $=i=>document.getElementById(i);
+const st={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+// preloader
+let n=0;const iv=setInterval(()=>{n=Math.min(100,n+Math.ceil(Math.random()*8));$('cnt').textContent=String(n).padStart(3,'0');if(n>=100){clearInterval(iv);$('enter').classList.add('show')}},55);
+$('enter').onclick=()=>{$('pre').classList.add('gone');type()};
+function type(){const s="Deep work needs a quiet place to begin. Set a timer, pick a task, breathe, and let the work glow.";let i=0;const el=$('tw');(function k(){if(i<=s.length){el.textContent=s.slice(0,i++);setTimeout(k,22)}})()}
+// justified text reveal
+const J=["Great work","isn't about time.","It's about","attention.","Protect it,","one session","at a time."];
+$('jp').innerHTML=J.map((l,i)=>`<span class="l ${i==3||i==5?'':''}">${l.split(' ').map((w,j)=>`<span style="transition-delay:${(i*.08+j*.04)}s">${w}</span>`).join('')}</span>`).join('');
+new IntersectionObserver((e,o)=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');}}),{threshold:.2}).observe($('just'));
+// theme, cursor, bar
+$('th').onclick=()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'};
+const dot=$('dot');addEventListener('mousemove',e=>{dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px'});
+document.addEventListener('mouseover',e=>{const b=e.target.closest('button,li span');dot.style.width=dot.style.height=b?'38px':'12px'});
+addEventListener('scroll',()=>{$('bar').style.opacity=scrollY>80?0:1});
+// timer
+const M={Focus:25,Short:5,Long:15};let mode='Focus',left=1500,run=null,sess=st.get('sess_'+new Date().toDateString(),0);
+$('modes').innerHTML=Object.keys(M).map(m=>`<button data-m="${m}">${m} ${M[m]}</button>`).join('');
+const C=2*Math.PI*46;$('rp').style.strokeDasharray=C;
+function draw(){const t=M[mode]*60;$('tt').textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');$('tl').textContent=mode;$('rp').style.strokeDashoffset=C*(1-left/t);$('se').textContent='Sessions today: '+sess;document.querySelectorAll('#modes button').forEach(b=>b.classList.toggle('on',b.dataset.m===mode));document.title=run?$('tt').textContent+' · Ember':'EMBER – Focus Studio'}
+function stop(){clearInterval(run);run=null;$('go').textContent='Start'}
+function beep(){try{const a=new AudioContext(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=660;g.gain.setValueAtTime(.2,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+1);o.start();o.stop(a.currentTime+1)}catch(e){}}
+function tick(){left--;if(left<=0){left=0;stop();beep();if(mode==='Focus'){sess++;st.set('sess_'+new Date().toDateString(),sess)}}draw()}
+$('go').onclick=()=>{if(run){stop()}else{if(left<=0)left=M[mode]*60;run=setInterval(tick,1000);$('go').textContent='Pause'}draw()};
+$('rs').onclick=()=>{stop();left=M[mode]*60;draw()};
+document.querySelectorAll('#modes button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;stop();left=M[mode]*60;draw()});draw();
+// tasks
+let T=st.get('tasks',[]);
+function rt(){$('tk').innerHTML=T.map((t,i)=>`<li class="${t.d?'d':''}"><div class="chk" data-c="${i}">${t.d?'✓':''}</div><span data-c="${i}">${t.t.replace(/</g,'&lt;')}</span><button class="x" data-x="${i}">✕</button></li>`).join('');const d=T.filter(t=>t.d).length;$('pg').style.width=T.length?d/T.length*100+'%':'0';$('tc').textContent=T.length?`${d} of ${T.length} done`:'No tasks yet – add your first.';st.set('tasks',T)}
+$('tk').onclick=e=>{const c=e.target.dataset.c,x=e.target.dataset.x;if(c!=null)T[c].d=!T[c].d;if(x!=null)T.splice(x,1);rt()};
+function add(){const v=$('ti').value.trim();if(v){T.push({t:v,d:false});$('ti').value='';rt()}}
+$('ta').onclick=add;$('ti').onkeydown=e=>{if(e.key==='Enter')add()};rt();
+// breathing
+let bi=null;const ph=[["Inhale",4,1],["Hold",4,1],["Exhale",6,.55]];
+$('bb').onclick=()=>{if(bi){clearTimeout(bi);bi=null;$('orb').textContent='Ready';$('orb').style.transform='scale(.55)';$('bb').textContent='Begin';return}
+ $('bb').textContent='Stop';let i=0;(function s(){const p=ph[i%3];$('orb').textContent=p[0];$('orb').style.transitionDuration=p[1]+'s';$('orb').style.transform=`scale(${p[2]})`;i++;bi=setTimeout(s,p[1]*1000)})()};
+// method
+const ME=[["Plan","Decide what matters before you begin. A clear target beats a long list.",["Pick 1–3 tasks","Define 'done'","Remove distractions"]],["Focus","Work in timed sessions with one task and no switching.",["25 minutes on","5 minutes off","Longer break after four"]],["Reflect","Close the loop: note what worked and what to change tomorrow.",["Review tasks","Write in the journal","Set tomorrow's first step"]]];
+let mi=0;function rm(){$('mn').textContent=mi+1;$('mt').textContent=ME[mi][0];$('md').textContent=ME[mi][1];$('ml').innerHTML=ME[mi][2].map(x=>`<li>— ${x}</li>`).join('')}
+$('nx').onclick=()=>{mi=(mi+1)%3;rm()};$('pv').onclick=()=>{mi=(mi+2)%3;rm()};rm();
+// scratch
+const TP=["Test yourself instead of rereading – retrieval beats review.","Space your study: revisit topics after 1, 3 and 7 days.","Explain it out loud as if teaching a beginner.","Sleep is part of studying – memory consolidates overnight.","Start with the hardest task while your energy is highest.","Mix problem types in one session to learn when to use each method."];
+const cv=$('cv'),cx=cv.getContext('2d');let ti=0,down=false;
+function cover(){const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;cx.setTransform(d,0,0,d,0,0);cx.globalCompositeOperation='source-over';cx.fillStyle='#000';cx.fillRect(0,0,r.width,r.height);cx.fillStyle='#888';cx.font='13px Helvetica';cx.textAlign='center';cx.fillText('SCRATCH TO REVEAL',r.width/2,r.height/2);$('tip').textContent=TP[ti]}
+function sc(e){if(!down)return;const r=cv.getBoundingClientRect();cx.globalCompositeOperation='destination-out';cx.beginPath();cx.arc(e.clientX-r.left,e.clientY-r.top,32,0,7);cx.fill()}
+cv.onpointerdown=e=>{down=true;sc(e)};cv.onpointermove=sc;addEventListener('pointerup',()=>down=false);
+$('nt').onclick=()=>{ti=(ti+1)%TP.length;cover()};cover();addEventListener('resize',cover);
+// journal
+const jt=$('jt');jt.value=st.get('journal','');
+function wc(){const w=jt.value.trim()?jt.value.trim().split(/\s+/).length:0;$('wc').textContent=w+' words'}wc();
+let jtm;jt.oninput=()=>{wc();$('js').textContent='';clearTimeout(jtm);jtm=setTimeout(()=>{st.set('journal',jt.value);$('js').textContent='Saved'},400)};
+$('jo').onclick=()=>$('ov').classList.add('open');$('cl').onclick=()=>$('ov').classList.remove('open');
+addEventListener('keydown',e=>{if(e.key==='Escape')$('ov').classList.remove('open')});
+$('dl').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([jt.value],{type:'text/plain'}));a.download='journal.txt';a.click()};
+</script>
+</body>
+</html>
